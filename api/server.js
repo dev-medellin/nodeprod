@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/', (req, res) => {
+app.post('/api', (req, res) => {
   console.log(req.body.params);
   let params = {
     status : 'Success',

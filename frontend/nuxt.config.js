@@ -1,3 +1,14 @@
+var env = require('./config');
+
+process.env.APP_NAME        = env.config.APP_NAME
+process.env.APP_URL         = env.config.APP_URL 
+process.env.API_URL         = env.config.API_URL
+process.env.FILE_URL        = env.config.FILE_URL
+process.env.FILE_BASE_URL   = env.config.FILE_BASE_URL
+process.env.APP_FB          = env.config.APP_FB
+process.env.APP_HOST        = env.config.APP_HOST
+
+
 
 export default {
   mode: 'universal',
@@ -58,5 +69,19 @@ export default {
     postcss: null, 
     extend (config, ctx) {
     }
+  },
+  publicRuntimeConfig: {
+    app_name    : process.env.APP_NAME,
+    host        : process.env.APP_HOST,
+    app_url     : process.env.APP_URL,
+    api_url     : process.env.API_URL,
+    // file_url    : process.env.FILE_URL,
+    // base_url    : { 
+        // base    : process.env.FILE_BASE_URL,
+        // quote   : process.env.FILE_BASE_URL+'images/quote/',
+        // icons   : process.env.FILE_BASE_URL+'images/icons/',
+        // inquiry : process.env.FILE_URL+'attachments/inquiry/',
+    // },
+    currency    : 'S$',
   }
 }
