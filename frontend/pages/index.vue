@@ -22,6 +22,9 @@
             <div class="buttons">
                 <button type="submit" class="btn orange">RESET PASSWORD &amp; SEND</button>
             </div>
+            <ul class="lst" style="list-style: none;" v-for="list in getList.data" :key="list._id">
+              <li><span class="font-weight-bold">{{list.name}}</span> <a href="javascript:void(0);" @click.prevent="removeList(list._id)"><span>Delete</span></a></li>
+            </ul>
           </div>
         </form>
       </div>
@@ -70,6 +73,7 @@ export default {
 .links {
   padding-top: 15px;
 }
+
 </style>
 <script>
 
@@ -82,9 +86,19 @@ export default {
         quotes: ''
       }
   },
+  computed : {
+      ...mapGetters({
+          getList     : 'testpost/list',
+      })
+  },
+      mounted() {  
+        this.getOrders()
+    },
   methods:{
     	...mapActions({
 				setFeaturedItem		: 'testpost/createQuotes',
+        getOrders         : 'testpost/getOrders',
+        removeLists        : 'testpost/removeList'
 			}),
     submitPasswordChange: function(){
 
@@ -94,7 +108,14 @@ export default {
       };
 
       this.setFeaturedItem(data).then( (response) => {
-        console.log(response)
+        this.getOrders()
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    removeList: function(id){
+      this.removeLists(id).then((response) => {
+        this.getOrders()
       }).catch((err) => {
         console.log(err)
       })

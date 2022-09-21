@@ -10,8 +10,10 @@ process.env.FILE_BASE_URL   = env.config.FILE_BASE_URL
 process.env.APP_FB          = env.config.APP_FB
 process.env.APP_HOST        = env.config.APP_HOST
 
+//#region DATABASE
+  require('./connection/db');
+//#endregion
 
-const db = require('./connection/db');
 const express = require('express');
 const routes = require('./routes/router');
 const app = express();
