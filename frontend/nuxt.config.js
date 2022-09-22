@@ -54,10 +54,45 @@ export default {
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
   axios: {
       baseUrl : process.env.API_URL,
       credentials: false,
+  },
+  auth: {
+    strategies: {
+      local: {
+//      scheme: "refresh",
+        token: {
+          property: "token", //property name that the Back-end sends for you as a access token for saving on localStorage and cookie of user browser
+          global: true,
+          required: true,
+          type: "Bearer"
+        },
+        user: {
+          property: "user",
+          autoFetch: true
+        },
+//      refreshToken: {  // it sends request automatically when the access token expires, and its expire time has set on the Back-end and does not need to we set it here, because is useless
+//        property: "refresh_token", // property name that the Back-end sends for you as a refresh token for saving on localStorage and cookie of user browser
+//        data: "refresh_token", // data can be used to set the name of the property you want to send in the request.
+//      },
+        endpoints: {
+          login: {
+            url: '/login',
+            method: 'post',
+            // propertyName: 'accessToken'
+          },
+          vuex: {
+            namespace: 'auth_client_'
+          },
+//        refresh: { url: "/api/auth/refresh-token", method: "post" },
+          logout: false, //  we don't have an endpoint for our logout in our API and we just remove the token from localstorage
+          user: { url: "/user", method: "get" }
+        }
+      }
+    }
   },
   /*
   ** Build configuration
