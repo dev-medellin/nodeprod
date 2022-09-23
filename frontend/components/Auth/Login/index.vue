@@ -24,30 +24,25 @@
     </form>
   </div>
 </template>
+
 <script>
-import qs from 'query-string';
 export default {
   data() {
     return {
       loginData: {
-        email: "",
-        password: "",
+        email: "test@test.com",
+        password: "12345678"
       }
     };
   },
   methods: {
     async login() {
-      // console.log({data:this.loginData})
       try {
         let response = await this.$auth.loginWith("local", {
-                    data: qs.stringify(this.loginData)
-                }).then(() => {
-                  // this.$router.push("/");
-                 
-                })
-        // this.$router.push("/");
-        // console.log(response);
-         console.log(this.$auth.user);
+          data: this.loginData
+        });
+        this.$router.push("/");
+        console.log(response);
       } catch (err) {
         console.log(err);
       }
@@ -55,3 +50,5 @@ export default {
   }
 };
 </script>
+
+<style></style>

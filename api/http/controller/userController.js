@@ -48,31 +48,33 @@ exports.grantAccess = function(action, resource) {
 }
  
 exports.allowIfLoggedin = async (req, res, next) => {
- try {
-  const user = res.locals.loggedInUser;
-  if (!user)
-   return res.status(401).json({
-    error: "You need to be logged in to access this route"
-   });
-   req.user = user;
-   next();
-  } catch (error) {
-   next(error);
-  }
+  console.log(res.locals.loggedInUser)
+//  try {
+//   const user = res.locals.loggedInUser;
+//   if (!user)
+//    return res.status(401).json({
+//     error: "You need to be logged in to access this route"
+//    });
+//    req.user = user;
+//    next();
+//   } catch (error) {
+//    next(error);
+//   }
 }
-
+let loadedUser;
 exports.login = async (req, res, next) => {
     try {
      const { email, password } = req.body;
      const user = await User.findOne({ email });
      if (!user) return next("Email Not Exist");
      const validPassword = await validatePassword(password, user.password);
-     if (!validPassword) return next(new Error('Password is not correct'))
+     if (!validPassword) return next(new Error('Password is not correct'));
      const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d"
      });
      await User.findByIdAndUpdate(user._id, { accessToken })
-     res.status(200).json(user);
+     loadedUser = user;
+     res.status(200).json({ token: accessToken });
     } catch (error) {
      next(error);
     }
@@ -86,17 +88,12 @@ exports.login = async (req, res, next) => {
    }
     
    exports.getUser = async (req, res, next) => {
-    console.log(process.env.JWT_SECRET);
-    // try {
-    //  const userId = req.params.userId;
-    //  const user = await User.findById(userId);
-    //  if (!user) return next(new Error('User does not exist'));
-    //   res.status(200).json({
-    //   data: user
-    //  });
-    // } catch (error) {
-    //  next(error)
-    // }
+    res.status(200).json({
+      user: {
+        id: loadedUser._id,
+        email: loadedUser.email,
+      },
+    });
    }
     
    exports.updateUser = async (req, res, next) => {
